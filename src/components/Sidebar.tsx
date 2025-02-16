@@ -2,13 +2,11 @@ import { Link, useLocation, useParams } from 'react-router-dom'
 import { 
   LayoutDashboard, 
   Settings, 
-  Users, 
   Layers, 
   Database, 
   Monitor, 
   Grid,
-  FileSpreadsheet,
-  Layout
+  FileSpreadsheet
 } from 'lucide-react'
 import { useProjectStore } from '../store/projectStore'
 import { useSidebarStore } from '../store/sidebarStore' 

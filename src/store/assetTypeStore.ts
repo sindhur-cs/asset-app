@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { defaultAssetTypes, AssetType } from '../constants/assetTypes'
+import { AssetType } from '../constants/assetTypes'
 
 interface AssetTypeState {
   assetTypes: AssetType[],

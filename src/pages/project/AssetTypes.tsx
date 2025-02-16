@@ -1,13 +1,10 @@
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Plus, File, Check } from 'lucide-react'
+import { Plus } from 'lucide-react'
 import Sidebar from '../../components/Sidebar'
-import { defaultAssetTypes } from '../../constants/assetTypes'
 import { useAssetTypeStore } from '../../store/assetTypeStore'
 import AssetTypeCard from '../../components/asset-types/AssetTypeCard'
 import AddCustomTypeDialog from '../../components/asset-types/AddCustomTypeDialog'
 import SelectDefaultTypeDialog from '../../components/asset-types/SelectDefaultTypeDialog'
-import { useProjectStore } from '../../store/projectStore'
 
 const AssetTypes = () => {
   const [isAddingType, setIsAddingType] = useState(false)
