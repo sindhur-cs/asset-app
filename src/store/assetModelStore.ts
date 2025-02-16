@@ -12,7 +12,7 @@ export interface AssetModel {
 
 const defaultModel: AssetModel = {
   id: 'default-model',
-  name: 'Default Screen',
+  name: 'Default Model',
   customFields: [],
   isDefault: true,
   createdAt: new Date().toISOString()

@@ -53,8 +53,9 @@ const TypeSchemes = () => {
               >
                 <div className="flex justify-between items-start mb-4">
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold text-gray-900 flex items-center">
                       {scheme.name}
+                      {scheme.isDefault && <span className="ml-2 text-sm text-purple-600">(Default)</span>}
                     </h3>
                     <p className="text-sm text-gray-500">
                       {scheme.assetTypes.length} types
