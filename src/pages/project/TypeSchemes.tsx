@@ -32,8 +32,8 @@ const TypeSchemes = () => {
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-2xl font-bold text-purple-900">Asset Type Schemes</h1>
-              <p className="text-gray-600 mt-1">Manage asset type schemes</p>
+              <h1 className="text-2xl font-bold text-purple-900">Asset Type Groups</h1>
+              <p className="text-gray-600 mt-1">Manage asset type groups</p>
             </div>
             <button
               onClick={() => setIsCreating(true)}
