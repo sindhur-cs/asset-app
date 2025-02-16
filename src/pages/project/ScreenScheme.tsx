@@ -4,7 +4,7 @@ import Sidebar from '../../components/Sidebar'
 import CreateMappingDialog from '../../components/CreateMappingDialog';
 import MappingCard from '../../components/MappingCard';
 import { useAssetTypeStore } from '../../store/assetTypeStore';
-import { AssetType, defaultAssetTypes } from '../../constants/assetTypes';
+import { AssetType } from '../../constants/assetTypes';
 import { useMappingStore } from '../../store/mappingStore';
 
 const ScreenScheme = () => {
