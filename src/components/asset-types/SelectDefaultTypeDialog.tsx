@@ -4,16 +4,14 @@ import { AssetType, defaultAssetTypes } from '../../constants/assetTypes'
 interface SelectDefaultTypeDialogProps {
   isOpen: boolean
   onClose: () => void
-  projectId: string
   projectAssetTypes: AssetType[]
-  onSelect: (projectId: string, type: AssetType) => void
-  onRemove: (projectId: string, typeId: string) => void
+  onSelect: (type: AssetType) => void
+  onRemove: (typeId: string) => void
 }
 
 const SelectDefaultTypeDialog = ({
   isOpen,
   onClose,
-  projectId,
   projectAssetTypes,
   onSelect,
   onRemove,
@@ -52,14 +50,14 @@ const SelectDefaultTypeDialog = ({
                 </div>
                 {isSelected ? (
                   <button
-                    onClick={() => onRemove(projectId, projectType!.id)}
+                    onClick={() => onRemove(projectType!.id)}
                     className="p-1.5 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-md transition-colors"
                   >
                     <Trash2 className="h-5 w-5" />
                   </button>
                 ) : (
                   <button
-                    onClick={() => onSelect(projectId, type)}
+                    onClick={() => onSelect(type)}
                     className="p-1.5 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-md transition-colors"
                   >
                     <Plus className="h-5 w-5" />

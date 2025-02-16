@@ -1,28 +1,29 @@
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { Plus, Settings, Trash2 } from 'lucide-react'
 import Sidebar from '../../components/Sidebar'
 import { useCustomFieldStore, FieldType } from '../../store/customFieldStore'
 
 const CustomFields = () => {
-  const { id: projectId } = useParams()
   const [isCreating, setIsCreating] = useState(false)
   const [fieldName, setFieldName] = useState('')
   const [fieldType, setFieldType] = useState<FieldType>('text')
+  const [isRequired, setIsRequired] = useState(false)
 
-  const { getProjectFields, addField, removeField } = useCustomFieldStore()
-  const customFields = getProjectFields(projectId!)
+  const { getFields, addField, removeField } = useCustomFieldStore()
+  const customFields = getFields()
 
   const handleCreateField = (e: React.FormEvent) => {
     e.preventDefault()
     if (fieldName && fieldType) {
-      addField(projectId!, {
+      addField({
+        id: `field-${Date.now()}`,
         name: fieldName,
         type: fieldType,
-        required: false
+        required: isRequired
       })
       setFieldName('')
       setFieldType('text')
+      setIsRequired(false)
       setIsCreating(false)
     }
   }
@@ -61,8 +62,8 @@ const CustomFields = () => {
                   </div>
                 </div>
                 <button
-                  onClick={() => removeField(projectId!, field.id)}
-                  className="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors"
+                  onClick={() => removeField(field.id)}
+                  className="p-2 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-md transition-colors"
                 >
                   <Trash2 className="h-5 w-5" />
                 </button>

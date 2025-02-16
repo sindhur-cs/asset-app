@@ -1,11 +1,10 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { CustomField, systemFields } from './customFieldStore'
+import { CustomField } from './customFieldStore'
 
 export interface AssetModel {
   id: string
   name: string
-  projectId: string
   customFields: CustomField[]
   isDefault?: boolean
   createdAt: string
@@ -14,58 +13,43 @@ export interface AssetModel {
 const defaultModel: AssetModel = {
   id: 'default-model',
   name: 'Default Screen',
-  projectId: '',
   customFields: [],
   isDefault: true,
   createdAt: new Date().toISOString()
 }
 
 interface AssetModelState {
-  models: Record<string, AssetModel[]>
-  addModel: (projectId: string, name: string, customFields: CustomField[]) => void
-  removeModel: (projectId: string, modelId: string) => void
-  getProjectModels: (projectId: string) => AssetModel[]
+  models: AssetModel[]
+  addModel: (name: string, customFields: CustomField[]) => void
+  removeModel: (modelId: string) => void
+  getModels: () => AssetModel[]
 }
 
 export const useAssetModelStore = create<AssetModelState>()(
   persist(
     (set, get) => ({
-      models: {},
+      models: [defaultModel],
 
-      addModel: (projectId, name, customFields) => {
+      addModel: (name, customFields) => {
         const newModel: AssetModel = {
-          id: `${projectId}-${Date.now()}`,
+          id: `model-${Date.now()}`,
           name,
-          projectId,
           customFields,
           createdAt: new Date().toISOString()
         }
         set((state) => ({
-          models: {
-            ...state.models,
-            [projectId]: [...(state.models[projectId] || [defaultModel]), newModel]
-          }
+          models: [...state.models, newModel]
         }))
       },
 
-      removeModel: (projectId, modelId) => {
-        set((state) => {
-          // Don't allow removal of default model
-          if (state.models[projectId]?.find(model => model.id === modelId)?.isDefault) {
-            return state
-          }
-          return {
-            models: {
-              ...state.models,
-              [projectId]: state.models[projectId]?.filter(model => model.id !== modelId) || [defaultModel]
-            }
-          }
-        })
+      removeModel: (modelId) => {
+        set((state) => ({
+          models: state.models.filter(model => model.id !== modelId)
+        }))
       },
 
-      getProjectModels: (projectId) => {
-        const models = get().models[projectId] || [{ ...defaultModel, projectId }]
-        return models
+      getModels: () => {
+        return get().models
       }
     }),
     {

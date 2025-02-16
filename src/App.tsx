@@ -4,7 +4,7 @@ import Project from './pages/Project'
 import AssetTypes from './pages/project/AssetTypes'
 import TypeSchemes from './pages/project/TypeSchemes'
 import AssetModels from './pages/project/AssetModels'
-import ScreenScheme from './pages/project/ScreenScheme'
+import AssetModelScheme from './pages/project/ScreenScheme'
 import CustomFields from './pages/project/CustomFields'
 
 const App = () => {
@@ -13,11 +13,11 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/project/:id" element={<Project />} />
-        <Route path="/project/:id/asset-types" element={<AssetTypes />} />
-        <Route path="/project/:id/type-schemes" element={<TypeSchemes />} />
-        <Route path="/project/:id/models" element={<AssetModels />} />
-        <Route path="/project/:id/screen-scheme" element={<ScreenScheme />} />
-        <Route path="/project/:id/custom-fields" element={<CustomFields />} />
+        <Route path="/asset-types" element={<AssetTypes />} />
+        <Route path="/type-schemes" element={<TypeSchemes />} />
+        <Route path="/models" element={<AssetModels />} />
+        <Route path="/asset-model-scheme" element={<AssetModelScheme />} />
+        <Route path="/custom-fields" element={<CustomFields />} />
 
       </Routes>
     </Router>

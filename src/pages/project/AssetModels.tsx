@@ -1,21 +1,19 @@
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { Plus, Settings, Trash2, Database } from 'lucide-react'
 import Sidebar from '../../components/Sidebar'
 import { useAssetModelStore } from '../../store/assetModelStore'
 import { useCustomFieldStore, systemFields } from '../../store/customFieldStore'
 
 const AssetModels = () => {
-  const { id: projectId } = useParams()
   const [isCreating, setIsCreating] = useState(false)
   const [modelName, setModelName] = useState('')
   const [selectedFields, setSelectedFields] = useState<string[]>([])
 
-  const { getProjectModels, addModel, removeModel } = useAssetModelStore()
-  const { getProjectFields } = useCustomFieldStore()
+  const { getModels, addModel, removeModel } = useAssetModelStore()
+  const { getFields } = useCustomFieldStore()
 
-  const models = getProjectModels(projectId!)
-  const customFields = getProjectFields(projectId!)
+  const models = getModels()
+  const customFields = getFields()
 
   const handleCreateModel = (e: React.FormEvent) => {
     e.preventDefault()
@@ -23,7 +21,7 @@ const AssetModels = () => {
       const selectedCustomFields = customFields.filter(
         field => selectedFields.includes(field.id)
       )
-      addModel(projectId!, modelName, selectedCustomFields)
+      addModel(modelName, selectedCustomFields)
       setModelName('')
       setSelectedFields([])
       setIsCreating(false)
@@ -68,8 +66,8 @@ const AssetModels = () => {
                   </div>
                   {!model.isDefault && (
                     <button
-                      onClick={() => removeModel(projectId!, model.id)}
-                      className="p-2 text-gray-400 hover:text-red-500 rounded-lg hover:bg-red-50 transition-colors"
+                      onClick={() => removeModel(model.id)}
+                      className="p-2 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-md transition-colors"
                     >
                       <Trash2 className="h-5 w-5" />
                     </button>

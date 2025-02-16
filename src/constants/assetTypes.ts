@@ -2,7 +2,6 @@ export interface AssetType {
   id: string;
   name: string;
   extension: string;
-  projectId?: string; // Optional: only present for project-specific types
 }
 
 export const defaultAssetTypes: AssetType[] = [

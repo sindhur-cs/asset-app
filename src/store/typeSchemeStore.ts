@@ -5,7 +5,6 @@ import { defaultAssetTypes, AssetType } from '../constants/assetTypes'
 export interface TypeScheme {
   id: string
   name: string
-  projectId?: string
   assetTypes: AssetType[]
   isDefault?: boolean
 }
@@ -18,57 +17,36 @@ const defaultScheme: TypeScheme = {
 }
 
 interface TypeSchemeState {
-  schemes: Record<string, TypeScheme[]>
-  addScheme: (projectId: string, name: string, assetTypes: AssetType[]) => void
-  removeScheme: (projectId: string, schemeId: string) => void
-  getProjectSchemes: (projectId: string) => TypeScheme[]
+  schemes: TypeScheme[]
+  addScheme: (name: string, assetTypes: AssetType[]) => void
+  removeScheme: (schemeId: string) => void
+  getSchemes: () => TypeScheme[]
 }
 
 export const useTypeSchemeStore = create<TypeSchemeState>()(
   persist(
     (set, get) => ({
-      schemes: {},
+      schemes: [defaultScheme],
 
-      addScheme: (projectId, name, assetTypes) => {
+      addScheme: (name, assetTypes) => {
         const newScheme: TypeScheme = {
-          id: `${projectId}-${Date.now()}`,
+          id: `scheme-${Date.now()}`,
           name,
-          projectId,
           assetTypes
         }
-        set((state) => {
-          const currentSchemes = state.schemes[projectId] || [defaultScheme]
-          const hasOnlyDefault = currentSchemes.length === 1 && currentSchemes[0].isDefault
-          
-          return {
-            schemes: {
-              ...state.schemes,
-              [projectId]: hasOnlyDefault 
-                ? [newScheme]  // Replace default with new scheme
-                : [...currentSchemes, newScheme]  // Add to existing schemes
-            }
-          }
-        })
+        set((state) => ({
+          schemes: [...state.schemes, newScheme]
+        }))
       },
 
-      removeScheme: (projectId, schemeId) => {
-        set((state) => {
-          const updatedSchemes = state.schemes[projectId]?.filter(
-            scheme => scheme.id !== schemeId
-          ) || []
-          
-          return {
-            schemes: {
-              ...state.schemes,
-              [projectId]: updatedSchemes.length ? updatedSchemes : [defaultScheme]
-            }
-          }
-        })
+      removeScheme: (schemeId) => {
+        set((state) => ({
+          schemes: state.schemes.filter(scheme => scheme.id !== schemeId)
+        }))
       },
 
-      getProjectSchemes: (projectId) => {
-        const schemes = get().schemes[projectId]
-        return schemes || [defaultScheme]
+      getSchemes: () => {
+        return get().schemes
       }
     }),
     {

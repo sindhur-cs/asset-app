@@ -5,22 +5,20 @@ import { AssetType } from '../../constants/assetTypes'
 interface AddCustomTypeDialogProps {
   isOpen: boolean
   onClose: () => void
-  projectId: string
-  onAdd: (projectId: string, type: AssetType) => void
+  onAdd: (type: AssetType) => void
 }
 
-const AddCustomTypeDialog = ({ isOpen, onClose, projectId, onAdd }: AddCustomTypeDialogProps) => {
+const AddCustomTypeDialog = ({ isOpen, onClose, onAdd }: AddCustomTypeDialogProps) => {
   const [name, setName] = useState('')
   const [extension, setExtension] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (name && extension) {
-      onAdd(projectId, {
-        id: `${projectId}-${extension}`,
+      onAdd({
+        id: extension,
         name,
         extension,
-        projectId
       })
       setName('')
       setExtension('')

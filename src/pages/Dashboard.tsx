@@ -27,15 +27,15 @@ const Dashboard = () => {
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-2xl font-bold text-purple-900">Projects</h1>
-              <p className="text-gray-600 mt-1">Manage and organize your projects</p>
+              <h1 className="text-2xl font-bold text-purple-900">Spaces</h1>
+              <p className="text-gray-600 mt-1">Manage and organize your spaces</p>
             </div>
             <button 
               onClick={() => setIsDialogOpen(true)}
               className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200"
             >
               <Plus className="h-5 w-5" />
-              Create Project
+              Create Space
             </button>
           </div>
           

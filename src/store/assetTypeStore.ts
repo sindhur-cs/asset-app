@@ -3,54 +3,33 @@ import { persist } from 'zustand/middleware'
 import { defaultAssetTypes, AssetType } from '../constants/assetTypes'
 
 interface AssetTypeState {
-  projectAssetTypes: Record<string, AssetType[]>
-  addAssetType: (projectId: string, assetType: AssetType) => void
-  addDefaultType: (projectId: string, defaultType: AssetType) => void
-  getProjectTypes: (projectId: string) => AssetType[]
-  removeAssetType: (projectId: string, assetTypeId: string) => void
+  assetTypes: AssetType[],
+  addAssetType: (assetType: AssetType) => void
+  addDefaultType: (defaultType: AssetType) => void
+  removeAssetType: (assetTypeId: string) => void
 }
 
 export const useAssetTypeStore = create<AssetTypeState>()(
   persist(
     (set, get) => ({
-      projectAssetTypes: {},
+      assetTypes: [],
       
-      addAssetType: (projectId, assetType) => {
-        set((state) => ({
-          projectAssetTypes: {
-            ...state.projectAssetTypes,
-            [projectId]: [...(state.projectAssetTypes[projectId] || []), assetType]
-          }
-        }))
+      addAssetType: (assetType) => {
+        set({
+          assetTypes: [...(get().assetTypes || []), assetType]
+        })
       },
 
-      addDefaultType: (projectId, defaultType) => {
-        const projectType = {
-          ...defaultType,
-          id: `${projectId}-${defaultType.extension}`,
-          projectId
-        }
-        set((state) => ({
-          projectAssetTypes: {
-            ...state.projectAssetTypes,
-            [projectId]: [...(state.projectAssetTypes[projectId] || []), projectType]
-          }
-        }))
+      addDefaultType: (defaultType) => {
+        set({
+          assetTypes: [...(get().assetTypes || []), defaultType]
+        })
       },
 
-      getProjectTypes: (projectId) => {
-        return get().projectAssetTypes[projectId] || []
-      },
-
-      removeAssetType: (projectId, assetTypeId) => {
-        set((state) => ({
-          projectAssetTypes: {
-            ...state.projectAssetTypes,
-            [projectId]: state.projectAssetTypes[projectId]?.filter(
-              type => type.id !== assetTypeId
-            ) || []
-          }
-        }))
+      removeAssetType: (assetTypeId) => {
+        set({
+          assetTypes: get().assetTypes.filter(type => type.id !== assetTypeId)
+        })
       }
     }),
     {

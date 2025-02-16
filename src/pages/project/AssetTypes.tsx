@@ -10,25 +10,20 @@ import SelectDefaultTypeDialog from '../../components/asset-types/SelectDefaultT
 import { useProjectStore } from '../../store/projectStore'
 
 const AssetTypes = () => {
-  const { id: projectId } = useParams()
   const [isAddingType, setIsAddingType] = useState(false)
   const [isSelectingDefault, setIsSelectingDefault] = useState(false)
-  const { getProject }= useProjectStore();
-  const project = getProject(Number(projectId));
   
-  const { getProjectTypes, addAssetType, addDefaultType, removeAssetType } = useAssetTypeStore()
-  const projectAssetTypes = getProjectTypes(projectId!)
+  const { assetTypes, addAssetType, addDefaultType, removeAssetType } = useAssetTypeStore()
 
   return (
     <div className="flex min-h-screen bg-gray-50">
       <Sidebar />
       <main className="flex-1 p-8">
         <div className="max-w-6xl mx-auto">
-          {/* Header section */}
           <div className="flex justify-between items-center mb-8">
             <div>
               <h1 className="text-2xl font-bold text-purple-900">Asset Types</h1>
-              <p className="text-gray-600 mt-1">Manage asset types for {project?.name} </p>
+              <p className="text-gray-600 mt-1">Manage asset types</p>
             </div>
             <div className="flex gap-3">
               <button
@@ -49,21 +44,21 @@ const AssetTypes = () => {
           </div>
 
           {/* Project Asset Types Grid */}
-          <div className="mb-8">
-            <h2 className="text-lg font-semibold text-purple-900 mb-4">Project Asset Types</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {projectAssetTypes.map((type) => (
-                <AssetTypeCard key={type.id} type={type} />
-              ))}
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            {assetTypes.map((type) => (
+              <AssetTypeCard 
+                key={type.id} 
+                type={type} 
+                onDelete={removeAssetType}
+              />
+            ))}
           </div>
 
           {/* Dialogs */}
           <SelectDefaultTypeDialog
             isOpen={isSelectingDefault}
             onClose={() => setIsSelectingDefault(false)}
-            projectId={projectId!}
-            projectAssetTypes={projectAssetTypes}
+            projectAssetTypes={assetTypes}
             onSelect={addDefaultType}
             onRemove={removeAssetType}
           />
@@ -71,7 +66,6 @@ const AssetTypes = () => {
           <AddCustomTypeDialog
             isOpen={isAddingType}
             onClose={() => setIsAddingType(false)}
-            projectId={projectId!}
             onAdd={addAssetType}
           />
         </div>

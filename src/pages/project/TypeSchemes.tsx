@@ -1,30 +1,24 @@
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Plus, File, X } from 'lucide-react'
+import { Plus, File, Trash2, X } from 'lucide-react'
 import Sidebar from '../../components/Sidebar'
 import { useTypeSchemeStore } from '../../store/typeSchemeStore'
 import { useAssetTypeStore } from '../../store/assetTypeStore'
 import { AssetType } from '../../constants/assetTypes'
-import { useProjectStore } from '../../store/projectStore'
 
 const TypeSchemes = () => {
-  const { id: projectId } = useParams()
   const [isCreating, setIsCreating] = useState(false)
   const [newSchemeName, setNewSchemeName] = useState('')
   const [selectedTypes, setSelectedTypes] = useState<AssetType[]>([])
-  const { getProject } = useProjectStore()
-  const project = getProject(Number(projectId))
   
-  const { getProjectSchemes, addScheme, removeScheme } = useTypeSchemeStore()
-  const { getProjectTypes } = useAssetTypeStore()
+  const { getSchemes, addScheme, removeScheme } = useTypeSchemeStore()
+  const { assetTypes } = useAssetTypeStore()
   
-  const schemes = getProjectSchemes(projectId!)
-  const projectTypes = getProjectTypes(projectId!)
+  const schemes = getSchemes()
 
   const handleCreateScheme = (e: React.FormEvent) => {
     e.preventDefault()
     if (newSchemeName && selectedTypes.length > 0) {
-      addScheme(projectId!, newSchemeName, selectedTypes)
+      addScheme(newSchemeName, selectedTypes)
       setNewSchemeName('')
       setSelectedTypes([])
       setIsCreating(false)
@@ -38,8 +32,8 @@ const TypeSchemes = () => {
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-2xl font-bold text-purple-900">Type Schemes</h1>
-              <p className="text-gray-600 mt-1">Manage asset type schemes for {project?.name}</p>
+              <h1 className="text-2xl font-bold text-purple-900">Asset Type Schemes</h1>
+              <p className="text-gray-600 mt-1">Manage asset type schemes</p>
             </div>
             <button
               onClick={() => setIsCreating(true)}
@@ -68,10 +62,10 @@ const TypeSchemes = () => {
                   </div>
                   {!scheme.isDefault && (
                     <button
-                      onClick={() => removeScheme(projectId!, scheme.id)}
-                      className="p-1.5 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-md transition-colors"
+                      onClick={() => removeScheme(scheme.id)}
+                      className="p-2 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-md transition-colors"
                     >
-                      <X className="h-5 w-5" />
+                      <Trash2 className="h-5 w-5" />
                     </button>
                   )}
                 </div>
@@ -123,7 +117,7 @@ const TypeSchemes = () => {
                         Select Asset Types
                       </label>
                       <div className="space-y-2 max-h-60 overflow-y-auto">
-                        {projectTypes.map((type) => (
+                        {assetTypes.map((type) => (
                           <label
                             key={type.id}
                             className="flex items-center gap-2 p-2 rounded-lg hover:bg-purple-50"
