@@ -11,7 +11,7 @@ export interface TypeScheme {
 
 const defaultScheme: TypeScheme = {
   id: 'default-scheme',
-  name: 'Default Asset Group',
+  name: 'Default Asset Type Group',
   assetTypes: defaultAssetTypes,
   isDefault: true
 }

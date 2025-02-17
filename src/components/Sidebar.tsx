@@ -9,6 +9,7 @@ import {
 import { useProjectStore } from '../store/projectStore'
 import { useSidebarStore } from '../store/sidebarStore'
 import SidebarGroup from './SidebarGroup'
+import { useState } from 'react'
 
 const Sidebar = () => {
     const location = useLocation()
@@ -18,6 +19,7 @@ const Sidebar = () => {
     const project = getProject(Number(params.id))
     const isActive = (path: string) => location.pathname === path
     const { toggleSettings, isSettingOpen } = useSidebarStore();
+    const [isProjectSettingsOpen, setIsProjectSettingsOpen] = useState(false);
 
     const navItems = [
         {
@@ -48,6 +50,32 @@ const Sidebar = () => {
                     label: 'Fields',
                     path: `/fields`,
                     isGroup: true
+                },
+            ]
+        }
+    ]
+
+    const projectSettingsItems = [
+        {
+            icon: Settings,
+            label: "Space Settings",
+            path: `/project/${params.id}/settings`,
+            isGroup: true,
+            children: [
+                {
+                    icon: Layers,
+                    label: 'Asset Type Groups',
+                    path: `/type-schemes`
+                },
+                {
+                    icon: Database,
+                    label: 'Asset Model Mappings',
+                    path: `/asset-model-scheme`
+                },
+                {
+                    icon: FileSpreadsheet,
+                    label: 'Field Config Mappings',
+                    path: `/field-configuration-mappings`
                 },
             ]
         }
@@ -121,15 +149,65 @@ const Sidebar = () => {
                 </ul>}
 
                 {isProjectRoute && (
-                    <>
-                        <Link
-                            to="/"
-                            className="flex items-center gap-3 px-4 py-2 text-gray-600 hover:text-purple-600"
-                        >
-                            <LayoutDashboard className="h-5 w-5" />
-                            Back to Spaces
-                        </Link>
-                    </>
+                    <div className="flex flex-col gap-3">
+                    <ul className="space-y-2">
+                        {projectSettingsItems.map((item) => {
+                            const Icon = item.icon
+                            return (
+                                <li key={item.path}>
+                                    {item.isGroup ? (
+                                        (item.children && item.children.length > 0) ?
+                                            <>
+                                                <button
+                                                    onClick={() => {
+                                                        if (item.label === 'Space Settings') {
+                                                            setIsProjectSettingsOpen(!isProjectSettingsOpen);
+                                                        }
+                                                    }}
+                                                    className="flex items-center gap-3 px-4 py-2 rounded-lg w-full text-left text-purple-800"
+                                                >
+                                                    <div className="flex-shrink-0">
+                                                        <Icon className="h-5 w-5" />
+                                                    </div>
+                                                    {item.label}
+                                                </button>
+                                                {
+                                                    isProjectSettingsOpen && <div className="flex flex-col gap-1.5 ml-7 mt-2 border-l-[1.5px] border-purple-400">
+                                                        {
+                                                            item.children.map((item: any) => (
+                                                                <SidebarGroup key={item.path} item={item} />
+                                                            ))
+                                                        }
+                                                    </div>
+                                                }
+                                            </> :
+                                            <SidebarGroup item={item} />
+                                    ) : (
+                                        <Link
+                                            to={item.path}
+                                            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors duration-200 ${isActive(item.path)
+                                                ? 'bg-purple-50 text-purple-700 font-medium'
+                                                : 'text-gray-600 hover:bg-gray-50 hover:text-purple-600'
+                                                }`}
+                                        >
+                                            <div className="flex-shrink-0">
+                                                <Icon className="h-5 w-5" />
+                                            </div>
+                                            {item.label}
+                                        </Link>
+                                    )}
+                                </li>
+                            )
+                        })}
+                    </ul>
+                    <Link
+                        to="/"
+                        className="flex items-center gap-3 px-4 py-2 text-gray-600 hover:text-purple-600"
+                    >
+                        <LayoutDashboard className="h-5 w-5" />
+                        Back to Spaces
+                    </Link>
+                    </div>
                 )}
             </nav>
         </div>
