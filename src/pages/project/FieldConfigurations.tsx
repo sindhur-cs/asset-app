@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plus, Settings, Trash2, File, ChevronRight } from 'lucide-react'
+import { Plus, Settings, Trash2, File, ChevronRight, Info } from 'lucide-react'
 import Sidebar from '../../components/Sidebar'
 import { useFieldConfigurationStore } from '../../store/fieldConfigurationStore'
 import { useCustomFieldStore, systemFields } from '../../store/customFieldStore'
@@ -7,7 +7,7 @@ import { useCustomFieldStore, systemFields } from '../../store/customFieldStore'
 const FieldConfigurations = () => {
   const [isCreating, setIsCreating] = useState(false)
   const [configName, setConfigName] = useState('')
-  const [selectedFields, setSelectedFields] = useState<Record<string, { isHidden: boolean; isMandatory: boolean; isDefault: boolean }>>({})
+  const [selectedFields, setSelectedFields] = useState<Record<string, { isHidden: boolean; isMandatory: boolean; isDefault: boolean; defaultValue?: string }>>({})
   const [expandedFieldId, setExpandedFieldId] = useState<string | null>(null)
   
   const { getFields } = useCustomFieldStore()
@@ -102,7 +102,8 @@ const FieldConfigurations = () => {
                   {config.fieldConfigs.map((f) => {
                     const field = allFields.find(field => field.id === f.fieldId);
                     return (
-                      <div key={f.fieldId} className="flex items-center justify-between p-2 bg-purple-50 rounded-lg">
+                        <div className="flex flex-col p-2 bg-purple-50 rounded-lg">
+                      <div key={f.fieldId} className="flex items-center justify-between ">
                         <div className="flex items-center gap-2">
                           {systemFieldIds.has(f.fieldId) ? (
                             <Settings className="h-4 w-4 text-purple-600" />
@@ -122,13 +123,15 @@ const FieldConfigurations = () => {
                               <span className="text-xs">Mandatory</span>
                             </div>
                           )}
-                          {f.isDefault && (
-                            <div className="flex items-center gap-1 px-4 text-purple-600 bg-purple-100 p-2 rounded-2xl">
-                              <span className="text-xs">Default</span>
+                        </div>
+                      </div>
+                          {f.defaultValue && (
+                            <div className="flex items-center gap-2 py-1.5 bg-purple-50 rounded-lg text-purple-600">
+                              <Info className="h-4 w-4" />
+                              <span className="text-xs">{f.defaultValue}</span>
                             </div>
                           )}
                         </div>
-                      </div>
                     );
                   })}
                 </div>
@@ -214,21 +217,21 @@ const FieldConfigurations = () => {
                                   />
                                   <span className="text-sm">Mandatory</span>
                                 </label>
-                                <label className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded">
+                                <div className="space-y-1 px-1 flex flex-col gap-0.5">
                                   <input
-                                    type="checkbox"
-                                    checked={selectedFields[field.id]?.isDefault || false}
+                                    type="text"
+                                    value={selectedFields[field.id]?.defaultValue || ''}
                                     onChange={(e) => setSelectedFields({
                                       ...selectedFields,
-                                      [field.id]: { 
+                                      [field.id]: {
                                         ...selectedFields[field.id],
-                                        isDefault: e.target.checked 
+                                        defaultValue: e.target.value
                                       }
                                     })}
-                                    className="text-purple-600 rounded"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 hover:border-purple-200 transition-colors duration-200"
+                                    placeholder="Enter help text..."
                                   />
-                                  <span className="text-sm">Default Value</span>
-                                </label>
+                                </div>
                               </div>
                             )}
                           </div>

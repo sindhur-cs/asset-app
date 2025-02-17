@@ -6,7 +6,7 @@ export interface FieldConfig {
   fieldId: string
   isHidden: boolean
   isMandatory: boolean
-  isDefault: boolean
+  defaultValue?: string
 }
 
 export interface FieldConfiguration {
@@ -22,7 +22,7 @@ const defaultConfig: FieldConfiguration = {
     fieldId: field.id,
     isHidden: true,
     isMandatory: true,
-    isDefault: true
+    defaultValue: ''
   }))
 }
 
