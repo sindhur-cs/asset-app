@@ -77,18 +77,25 @@ const FieldConfigurations = () => {
                   <div className="flex items-center gap-3">
                     <Settings className="h-5 w-5 text-purple-600" />
                     <div>
-                      <h3 className="font-medium text-gray-900">{config.name}</h3>
+                      <h3 className="font-medium text-gray-900 flex items-center">
+                        {config.name}
+                        {config.id === "default-config" && (
+                          <span className="ml-2 text-sm text-purple-600">(Default)</span>
+                        )}
+                      </h3>
                       <p className="text-sm text-gray-500">
                         {config.fieldConfigs.length} fields configured
                       </p>
                     </div>
                   </div>
-                  <button
-                    onClick={() => removeConfiguration(config.id)}
-                    className="p-2 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-md"
-                  >
-                    <Trash2 className="h-5 w-5" />
-                  </button>
+                  {config.id !== "default-config" && (
+                    <button
+                      onClick={() => removeConfiguration(config.id)}
+                      className="p-2 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-md"
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </button>
+                  )}
                 </div>
                 
                 <div className="grid grid-cols-2 gap-2 mt-7 mb-2">

@@ -14,6 +14,7 @@ interface ProjectState {
   updateProject: (id: number, name: string) => void
   deleteProject: (id: number) => void
   getProject: (id: number) => Project | undefined
+  removeProject: (id: number) => void
 }
 
 export const useProjectStore = create<ProjectState>()(
@@ -52,6 +53,12 @@ export const useProjectStore = create<ProjectState>()(
 
       getProject: (id) => {
         return get().projects.find((project) => project.id === id)
+      },
+
+      removeProject: (id) => {
+        set((state) => ({
+          projects: state.projects.filter((project) => project.id !== id)
+        }))
       },
     }),
     {

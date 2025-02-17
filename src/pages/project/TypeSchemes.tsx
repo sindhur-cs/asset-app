@@ -40,7 +40,7 @@ const TypeSchemes = () => {
               className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors duration-200"
             >
               <Plus className="h-5 w-5" />
-              Create Scheme
+              Create Group
             </button>
           </div>
 
@@ -90,7 +90,7 @@ const TypeSchemes = () => {
             <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center">
               <div className="bg-white rounded-lg p-6 w-full max-w-md">
                 <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-xl font-bold">Create Type Scheme</h2>
+                  <h2 className="text-xl font-bold">Create Type Group</h2>
                   <button
                     onClick={() => setIsCreating(false)}
                     className="text-gray-500 hover:text-gray-700"
@@ -102,7 +102,7 @@ const TypeSchemes = () => {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Scheme Name
+                        Group Name
                       </label>
                       <input
                         type="text"

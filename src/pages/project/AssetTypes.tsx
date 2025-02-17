@@ -19,8 +19,8 @@ const AssetTypes = () => {
         <div className="max-w-6xl mx-auto">
           <div className="flex justify-between items-center mb-8">
             <div>
-              <h1 className="text-2xl font-bold text-purple-900">Asset Types Groups</h1>
-              <p className="text-gray-600 mt-1">Manage asset types groups</p>
+              <h1 className="text-2xl font-bold text-purple-900">Asset Types</h1>
+              <p className="text-gray-600 mt-1">Manage asset types</p>
             </div>
             <div className="flex gap-3">
               <button
