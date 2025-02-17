@@ -6,6 +6,7 @@ export interface FieldConfig {
   fieldId: string
   isHidden: boolean
   isMandatory: boolean
+  isDefault: boolean
 }
 
 export interface FieldConfiguration {
@@ -19,8 +20,9 @@ const defaultConfig: FieldConfiguration = {
   name: 'Default Configuration',
   fieldConfigs: systemFields.map(field => ({
     fieldId: field.id,
-    isHidden: false,
-    isMandatory: true
+    isHidden: true,
+    isMandatory: true,
+    isDefault: true
   }))
 }
 

@@ -14,16 +14,23 @@ const AssetTypeCard = ({ type, onDelete }: AssetTypeCardProps) => {
           <File className="h-5 w-5 text-purple-600" />
         </div>
         <div>
-          <h3 className="font-medium text-gray-900">{type.name}</h3>
+          <h3 className="font-medium text-gray-900 flex items-center">
+            {type.name}
+            {type.category && (
+              <span className="text-purple-600 ml-2 text-xs">({type.category})</span>
+            )}
+          </h3>
           <p className="text-sm text-gray-500">.{type.extension}</p>
         </div>
       </div>
-      <button
-        onClick={() => onDelete(type.id)}
-        className="p-2 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-md transition-colors"
-      >
-        <Trash2 className="h-5 w-5" />
-      </button>
+      {!type.isDefault && onDelete && (
+        <button
+          onClick={() => onDelete(type.id)}
+          className="p-2 text-purple-600 hover:text-purple-700 hover:bg-purple-50 rounded-md transition-colors"
+        >
+          <Trash2 className="h-5 w-5" />
+        </button>
+      )}
     </div>
   )
 }

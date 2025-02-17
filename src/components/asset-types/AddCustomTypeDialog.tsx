@@ -19,6 +19,7 @@ const AddCustomTypeDialog = ({ isOpen, onClose, onAdd }: AddCustomTypeDialogProp
         id: extension,
         name,
         extension,
+        isDefault: false
       })
       setName('')
       setExtension('')

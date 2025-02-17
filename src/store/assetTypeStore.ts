@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import { AssetType } from '../constants/assetTypes'
+import { AssetType, defaultAssetTypes } from '../constants/assetTypes'
 
 interface AssetTypeState {
   assetTypes: AssetType[],
@@ -12,7 +12,7 @@ interface AssetTypeState {
 export const useAssetTypeStore = create<AssetTypeState>()(
   persist(
     (set, get) => ({
-      assetTypes: [],
+      assetTypes: defaultAssetTypes,
       
       addAssetType: (assetType) => {
         set({
@@ -28,7 +28,9 @@ export const useAssetTypeStore = create<AssetTypeState>()(
 
       removeAssetType: (assetTypeId) => {
         set({
-          assetTypes: get().assetTypes.filter(type => type.id !== assetTypeId)
+          assetTypes: get().assetTypes.filter(type => 
+            type.id !== assetTypeId || defaultAssetTypes.some(defaultType => defaultType.id === type.id)
+          )
         })
       }
     }),

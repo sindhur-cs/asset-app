@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { X } from 'lucide-react';
 import { AssetType } from '../constants/assetTypes';
 import { useAssetModelStore } from '../store/assetModelStore';
+import CategorizedAssetTypeSelector from './asset-types/CategorizedAssetTypeSelector';
 
 interface CreateMappingDialogProps {
   isOpen: boolean;
@@ -71,25 +72,12 @@ const CreateMappingDialog = ({ isOpen, onClose, onCreate, assetTypes }: CreateMa
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Select Asset Types</label>
-              <div className="space-y-2 max-h-60 overflow-y-auto">
-                {assetTypes.map((type) => (
-                  <label key={type.id} className="flex items-center gap-2 p-2 rounded-lg hover:bg-purple-50">
-                    <input
-                      type="checkbox"
-                      checked={selectedAssetTypes.includes(type.id)}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedAssetTypes([...selectedAssetTypes, type.id]);
-                        } else {
-                          setSelectedAssetTypes(selectedAssetTypes.filter(id => id !== type.id));
-                        }
-                      }}
-                      className="text-purple-600 rounded"
-                    />
-                    <span>{type.name}</span>
-                  </label>
-                ))}
-              </div>
+              <CategorizedAssetTypeSelector
+                assetTypes={assetTypes}
+                selectedIds={selectedAssetTypes}
+                onSelect={(id) => setSelectedAssetTypes(prev => [...prev, id])}
+                onDeselect={(id) => setSelectedAssetTypes(prev => prev.filter(selectedId => selectedId !== id))}
+              />
             </div>
           </div>
           <div className="flex justify-end gap-2 mt-6">

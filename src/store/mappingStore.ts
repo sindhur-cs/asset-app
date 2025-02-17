@@ -21,7 +21,7 @@ export const useMappingStore = create<MappingState>()(
     (set, get) => ({
       mappings: [
         {
-          name: 'Default Mapping',
+          name: 'Default Model Mapping',
           assetTypes: defaultAssetTypes,
           assetModel: '',
           isDefault: true

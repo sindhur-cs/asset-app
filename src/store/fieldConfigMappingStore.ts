@@ -17,7 +17,7 @@ interface FieldConfigMappingState {
 }
 
 const defaultConfig: FieldConfigMapping = {
-  name: 'Default Field Config Mapping',
+  name: 'Default Field Configuration Mapping',
   assetTypes: defaultAssetTypes,
   fieldConfig: 'default-config',
   isDefault: true

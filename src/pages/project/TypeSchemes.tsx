@@ -4,6 +4,7 @@ import Sidebar from '../../components/Sidebar'
 import { useTypeSchemeStore } from '../../store/typeSchemeStore'
 import { useAssetTypeStore } from '../../store/assetTypeStore'
 import { AssetType } from '../../constants/assetTypes'
+import CategorizedAssetTypeSelector from '../../components/asset-types/CategorizedAssetTypeSelector'
 
 const TypeSchemes = () => {
   const [isCreating, setIsCreating] = useState(false)
@@ -85,7 +86,7 @@ const TypeSchemes = () => {
             ))}
           </div>
 
-          {/* Create Scheme Dialog */}
+        {/* Group Dialog Box */}
           {isCreating && (
             <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center">
               <div className="bg-white rounded-lg p-6 w-full max-w-md">
@@ -117,28 +118,19 @@ const TypeSchemes = () => {
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Select Asset Types
                       </label>
-                      <div className="space-y-2 max-h-60 overflow-y-auto">
-                        {assetTypes.map((type) => (
-                          <label
-                            key={type.id}
-                            className="flex items-center gap-2 p-2 rounded-lg hover:bg-purple-50"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={selectedTypes.some(t => t.id === type.id)}
-                              onChange={(e) => {
-                                if (e.target.checked) {
-                                  setSelectedTypes([...selectedTypes, type])
-                                } else {
-                                  setSelectedTypes(selectedTypes.filter(t => t.id !== type.id))
-                                }
-                              }}
-                              className="text-purple-600 rounded"
-                            />
-                            <span>{type.name}</span>
-                          </label>
-                        ))}
-                      </div>
+                      <CategorizedAssetTypeSelector
+                        assetTypes={assetTypes}
+                        selectedIds={selectedTypes.map(type => type.id)}
+                        onSelect={(id) => {
+                          const type = assetTypes.find(t => t.id === id);
+                          if (type) {
+                            setSelectedTypes(prev => [...prev, type]);
+                          }
+                        }}
+                        onDeselect={(id) => {
+                          setSelectedTypes(prev => prev.filter(t => t.id !== id));
+                        }}
+                      />
                     </div>
                   </div>
                   <div className="flex justify-end gap-2 mt-6">
@@ -154,7 +146,7 @@ const TypeSchemes = () => {
                       disabled={!newSchemeName || selectedTypes.length === 0}
                       className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Create Scheme
+                      Create Group
                     </button>
                   </div>
                 </form>

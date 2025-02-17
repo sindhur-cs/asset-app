@@ -7,7 +7,7 @@ import { useCustomFieldStore, systemFields } from '../../store/customFieldStore'
 const FieldConfigurations = () => {
   const [isCreating, setIsCreating] = useState(false)
   const [configName, setConfigName] = useState('')
-  const [selectedFields, setSelectedFields] = useState<Record<string, { isHidden: boolean; isMandatory: boolean }>>({})
+  const [selectedFields, setSelectedFields] = useState<Record<string, { isHidden: boolean; isMandatory: boolean; isDefault: boolean }>>({})
   const [expandedFieldId, setExpandedFieldId] = useState<string | null>(null)
   
   const { getFields } = useCustomFieldStore()
@@ -26,7 +26,7 @@ const FieldConfigurations = () => {
       const systemFieldDefaults = Object.fromEntries(
         systemFields.map(field => [
           field.id,
-          { isHidden: false, isMandatory: true }
+          { isHidden: true, isMandatory: true, isDefault: true }
         ])
       )
       
@@ -67,7 +67,7 @@ const FieldConfigurations = () => {
           </div>
 
           {/* Configurations List */}
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4">
             {configurations.map((config) => (
               <div 
                 key={config.id} 
@@ -111,15 +111,20 @@ const FieldConfigurations = () => {
                           )}
                           <span className="text-sm">{field?.name}</span>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-2 text-xs">
                           {f.isHidden && (
-                            <div className="flex items-center gap-1 text-purple-500">
+                            <div className="flex items-center gap-1 px-4 text-purple-600 bg-purple-100 p-2 rounded-2xl">
                               <span className="text-xs">Hidden</span>
                             </div>
                           )}
                           {f.isMandatory && (
-                            <div className="flex items-center gap-1 text-purple-500">
+                            <div className="flex items-center gap-1 px-4 text-purple-600 bg-purple-100 p-2 rounded-2xl">
                               <span className="text-xs">Mandatory</span>
+                            </div>
+                          )}
+                          {f.isDefault && (
+                            <div className="flex items-center gap-1 px-4 text-purple-600 bg-purple-100 p-2 rounded-2xl">
+                              <span className="text-xs">Default</span>
                             </div>
                           )}
                         </div>
@@ -175,43 +180,54 @@ const FieldConfigurations = () => {
                                   <span className="text-xs text-purple-600">(System)</span>
                                 )}
                               </div>
-                              {!isSystemField && (
-                                <div className="text-xs text-gray-500">
-                                  {
-                                   selectedFields[field.id]?.isHidden ? 'Hidden' : 
-                                   selectedFields[field.id]?.isMandatory && 'Mandatory'
-                                  }
-                                </div>
-                              )}
                             </div>
 
                             {!isSystemField && isExpanded && (
                               <div className="pl-8 pr-4 pb-3 space-y-2">
                                 <label className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded">
                                   <input
-                                    type="radio"
-                                    name={field.id}
-                                    checked={selectedFields[field.id]?.isHidden === true}
-                                    onChange={() => setSelectedFields({
+                                    type="checkbox"
+                                    checked={selectedFields[field.id]?.isHidden || false}
+                                    onChange={(e) => setSelectedFields({
                                       ...selectedFields,
-                                      [field.id]: { isHidden: true, isMandatory: false }
+                                      [field.id]: { 
+                                        ...selectedFields[field.id],
+                                        isHidden: e.target.checked 
+                                      }
                                     })}
-                                    className="text-purple-600"
+                                    className="text-purple-600 rounded"
                                   />
                                   <span className="text-sm">Hidden</span>
                                 </label>
                                 <label className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded">
                                   <input
-                                    type="radio"
-                                    name={field.id}
-                                    checked={selectedFields[field.id]?.isMandatory === true}
-                                    onChange={() => setSelectedFields({
+                                    type="checkbox"
+                                    checked={selectedFields[field.id]?.isMandatory || false}
+                                    onChange={(e) => setSelectedFields({
                                       ...selectedFields,
-                                      [field.id]: { isHidden: false, isMandatory: true }
+                                      [field.id]: { 
+                                        ...selectedFields[field.id],
+                                        isMandatory: e.target.checked 
+                                      }
                                     })}
-                                    className="text-purple-600"
+                                    className="text-purple-600 rounded"
                                   />
                                   <span className="text-sm">Mandatory</span>
+                                </label>
+                                <label className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedFields[field.id]?.isDefault || false}
+                                    onChange={(e) => setSelectedFields({
+                                      ...selectedFields,
+                                      [field.id]: { 
+                                        ...selectedFields[field.id],
+                                        isDefault: e.target.checked 
+                                      }
+                                    })}
+                                    className="text-purple-600 rounded"
+                                  />
+                                  <span className="text-sm">Default Value</span>
                                 </label>
                               </div>
                             )}
