@@ -7,7 +7,13 @@ import { useCustomFieldStore, systemFields } from '../../store/customFieldStore'
 const FieldConfigurations = () => {
   const [isCreating, setIsCreating] = useState(false)
   const [configName, setConfigName] = useState('')
-  const [selectedFields, setSelectedFields] = useState<Record<string, { isHidden: boolean; isMandatory: boolean; isDefault: boolean; defaultValue?: string }>>({})
+  const [selectedFields, setSelectedFields] = useState<Record<string, {
+    name: string
+    isHidden: boolean
+    isMandatory: boolean
+    isDefault: boolean
+    defaultValue?: string
+  }>>({})
   const [expandedFieldId, setExpandedFieldId] = useState<string | null>(null)
   
   const { getFields } = useCustomFieldStore()
@@ -26,7 +32,12 @@ const FieldConfigurations = () => {
       const systemFieldDefaults = Object.fromEntries(
         systemFields.map(field => [
           field.id,
-          { isHidden: true, isMandatory: true, isDefault: true }
+          { 
+            name: field.name,
+            isHidden: true, 
+            isMandatory: true, 
+            isDefault: true 
+          }
         ])
       )
       
@@ -195,6 +206,7 @@ const FieldConfigurations = () => {
                                       ...selectedFields,
                                       [field.id]: { 
                                         ...selectedFields[field.id],
+                                        name: field.name,
                                         isHidden: e.target.checked 
                                       }
                                     })}
@@ -210,6 +222,7 @@ const FieldConfigurations = () => {
                                       ...selectedFields,
                                       [field.id]: { 
                                         ...selectedFields[field.id],
+                                        name: field.name,
                                         isMandatory: e.target.checked 
                                       }
                                     })}
@@ -225,6 +238,7 @@ const FieldConfigurations = () => {
                                       ...selectedFields,
                                       [field.id]: {
                                         ...selectedFields[field.id],
+                                        name: field.name,
                                         defaultValue: e.target.value
                                       }
                                     })}

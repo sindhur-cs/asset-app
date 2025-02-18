@@ -4,18 +4,24 @@ import Sidebar from '../components/Sidebar'
 import CreateProjectDialog from '../components/CreateProjectDialog'
 import ProjectCard from '../components/ProjectCard'
 import { useProjectStore } from '../store/projectStore'
+import { useFieldConfigMappingStore } from '../store/fieldConfigMappingStore'
 
 const Dashboard = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [projectName, setProjectName] = useState('')
+  const [selectedMapping, setSelectedMapping] = useState('')
   
   const { projects, addProject } = useProjectStore()
+  const { getMappings } = useFieldConfigMappingStore()
+  const mappings = getMappings()
 
   const handleCreateProject = (e: React.FormEvent) => {
     e.preventDefault()
     if (projectName.trim()) {
-      addProject(projectName.trim())
+      const selectedMappingConfig = mappings.find(mapping => mapping.name === selectedMapping)
+      addProject(projectName.trim(), selectedMappingConfig || mappings[0])
       setProjectName('')
+      setSelectedMapping('')
       setIsDialogOpen(false)
     }
   }
@@ -57,6 +63,9 @@ const Dashboard = () => {
           projectName={projectName}
           onProjectNameChange={setProjectName}
           onSubmit={handleCreateProject}
+          mappings={mappings}
+          selectedMapping={selectedMapping}
+          onMappingChange={setSelectedMapping}
         />
       </main>
     </div>

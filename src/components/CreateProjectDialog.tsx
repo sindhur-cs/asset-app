@@ -1,11 +1,15 @@
 import { X } from 'lucide-react'
+import { FieldConfigMapping } from '../store/fieldConfigMappingStore'
 
 interface CreateProjectDialogProps {
   isOpen: boolean
   onClose: () => void
   projectName: string
-  onProjectNameChange: (value: string) => void
+  onProjectNameChange: (name: string) => void
   onSubmit: (e: React.FormEvent) => void
+  mappings: FieldConfigMapping[]
+  selectedMapping: string
+  onMappingChange: (mapping: string) => void
 }
 
 const CreateProjectDialog = ({
@@ -13,7 +17,10 @@ const CreateProjectDialog = ({
   onClose,
   projectName,
   onProjectNameChange,
-  onSubmit
+  onSubmit,
+  mappings,
+  selectedMapping,
+  onMappingChange
 }: CreateProjectDialogProps) => {
   if (!isOpen) return null
 
@@ -30,24 +37,39 @@ const CreateProjectDialog = ({
           </button>
         </div>
         <form onSubmit={onSubmit}>
-          <div className="mb-4">
-            <label 
-              htmlFor="projectName" 
-              className="block text-sm font-medium text-gray-700 mb-2"
-            >
-              Space Name
-            </label>
-            <input
-              id="projectName"
-              type="text"
-              value={projectName}
-              onChange={(e) => onProjectNameChange(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-              placeholder="Enter space name"
-              required
-            />
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Space Name
+              </label>
+              <input
+                type="text"
+                value={projectName}
+                onChange={(e) => onProjectNameChange(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                placeholder="e.g., My Project"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Field Configuration Mapping
+              </label>
+              <select
+                value={selectedMapping}
+                onChange={(e) => onMappingChange(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+                required
+              >
+                {mappings.map((mapping) => (
+                  <option key={mapping.name} value={mapping.name}>
+                    {mapping.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-end gap-2 mt-6">
             <button
               type="button"
               onClick={onClose}
@@ -57,9 +79,9 @@ const CreateProjectDialog = ({
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-purple-500 text-white rounded-md hover:bg-purple-600"
+              className="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700"
             >
-              Create
+              Create Space
             </button>
           </div>
         </form>

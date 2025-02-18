@@ -1,8 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { AssetType, defaultAssetTypes } from '../constants/assetTypes';
+import { useProjectStore } from './projectStore';
 
-interface FieldConfigMapping {
+export interface FieldConfigMapping {
   name: string;
   listMappings: {mappingId: number, assetTypes: AssetType[], fieldConfig: string}[],
   isDefault: boolean;
@@ -36,6 +37,9 @@ export const useFieldConfigMappingStore = create<FieldConfigMappingState>()(
             set((state) => ({
                 mappings: state.mappings.map((m) => m.name === mapping.name ? newMapping : m)
             }));
+
+            // triggers the newly added mapping under the same field config scheme name
+            useProjectStore.getState().updateProject(newMapping);
 
             return;
         }

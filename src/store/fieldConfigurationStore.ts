@@ -4,6 +4,7 @@ import { systemFields } from './customFieldStore'
 
 export interface FieldConfig {
   fieldId: string
+  name: string
   isHidden: boolean
   isMandatory: boolean
   defaultValue?: string
@@ -20,6 +21,7 @@ const defaultConfig: FieldConfiguration = {
   name: 'Default Configuration',
   fieldConfigs: systemFields.map(field => ({
     fieldId: field.id,
+    name: field.name,
     isHidden: true,
     isMandatory: true,
     defaultValue: ''
@@ -31,6 +33,7 @@ interface FieldConfigurationState {
   addConfiguration: (config: FieldConfiguration) => void
   removeConfiguration: (configId: string) => void
   getConfigurations: () => FieldConfiguration[]
+  getConfiguration: (config: string) => FieldConfiguration | null
 }
 
 export const useFieldConfigurationStore = create<FieldConfigurationState>()(
@@ -52,6 +55,10 @@ export const useFieldConfigurationStore = create<FieldConfigurationState>()(
       
       getConfigurations: () => {
         return get().configurations
+      },
+
+      getConfiguration: (config) => {
+        return get().configurations.find((c) => config === c.id) || null
       }
     }),
     {
