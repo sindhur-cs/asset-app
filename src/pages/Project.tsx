@@ -11,7 +11,7 @@ const Project = () => {
     const { getProject } = useProjectStore()
     const [assets, setAssets] = useState(new Map());
     const { mappings } = useFieldConfigMappingStore();
-    const { getConfiguration } = useFieldConfigurationStore();
+    const { getConfiguration, configurations } = useFieldConfigurationStore();
 
     const project = getProject(Number(id))
     console.log(project);
@@ -57,6 +57,15 @@ const Project = () => {
         setAssets(newAssets);
     }, [listMappings, project, mappings, mappings.length]);
 
+    const isFieldMandatory = (fieldName: string) => {
+        console.log(configurations)
+        return configurations?.some(config => 
+            config.fieldConfigs?.some(fieldConfig => 
+                fieldConfig.name === fieldName && fieldConfig.isMandatory
+            )
+        );
+    };
+
     return (
         <div className="flex min-h-screen bg-gray-50">
             <Sidebar />
@@ -88,12 +97,23 @@ const Project = () => {
                                             <td className="px-6 py-4 text-sm text-gray-500">{category}</td>
                                             <td className="px-6 py-4 text-sm text-gray-700">
                                                 <div className="flex flex-wrap gap-2">
-                                                    {Array.from(configuredFields).map((field, index) => (
-                                                        <span key={index} className="bg-purple-100 text-purple-400 px-2 py-1 rounded text-xs">
-                                                            {/* @ts-ignore */}
-                                                            {field || ""}
-                                                        </span>
-                                                    ))}
+                                                    {Array.from(configuredFields).map((field, index) => {
+                                                        // @ts-ignore
+                                                        const isMandatory = isFieldMandatory(field);
+                                                        return (
+                                                            <span 
+                                                                key={index}
+                                                                className={`px-2 py-1 rounded text-xs ${
+                                                                    isMandatory 
+                                                                        ? 'bg-purple-600 text-white' 
+                                                                        : 'bg-purple-100 text-purple-400'
+                                                                }`}
+                                                            >
+                                                                {/* @ts-ignore */}
+                                                                {field || ""}
+                                                            </span>
+                                                        );
+                                                    })}
                                                 </div>
                                             </td>
                                         </tr>
