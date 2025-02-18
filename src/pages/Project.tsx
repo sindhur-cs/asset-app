@@ -65,8 +65,8 @@ const Project = () => {
                     <h1 className="text-2xl font-bold text-purple-900 mb-6">{project?.name}</h1>
 
                     <div className="flex flex-col gap-4 mt-11">
-                        <div className="mb-4">
-                            <div className="flex items-center text-purple-700 gap-2 mb-4">
+                        <div>
+                            <div className="flex items-center text-purple-700 gap-2 mb-2">
                                 <Layers className="h-5 w-5" />
                                 <h2 className="text-xl font-semibold text-purple-900">Asset Types</h2>
                             </div>

@@ -8,6 +8,7 @@ import AssetModelScheme from './pages/project/ScreenScheme'
 import CustomFields from './pages/project/CustomFields'
 import FieldConfigurations from './pages/project/FieldConfigurations'
 import FieldConfigMappings from './pages/project/FieldConfigMappings'
+import FieldTable from './pages/project/FieldTable'
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/project/:id" element={<Project />} />
+        <Route path="/project/:id/fields" element={<FieldTable />} />
         <Route path="/asset-types" element={<AssetTypes />} />
         <Route path="/type-schemes" element={<TypeSchemes />} />
         <Route path="/models" element={<AssetModels />} />
