@@ -4,8 +4,7 @@ import { AssetType, defaultAssetTypes } from '../constants/assetTypes';
 
 interface FieldConfigMapping {
   name: string;
-  assetTypes: AssetType[];
-  fieldConfig: string;
+  listMappings: {mappingId: number, assetTypes: AssetType[], fieldConfig: string}[],
   isDefault: boolean;
 }
 
@@ -18,8 +17,7 @@ interface FieldConfigMappingState {
 
 const defaultConfig: FieldConfigMapping = {
   name: 'Default Field Configuration Mapping',
-  assetTypes: defaultAssetTypes,
-  fieldConfig: 'default-config',
+  listMappings: [{ mappingId: Date.now(), assetTypes: defaultAssetTypes, fieldConfig: "default-config" }],
   isDefault: true
 }
 
@@ -31,12 +29,23 @@ export const useFieldConfigMappingStore = create<FieldConfigMappingState>()(
       ],
 
       addMapping: (name, fieldConfig, assetTypes) => {
+        const mapping = get().mappings.find((mapping: FieldConfigMapping) => mapping.name === name);
+        console.log(mapping, name);
+        if(mapping) {
+            const newMapping = { ...mapping, listMappings: [...mapping.listMappings, { mappingId: Date.now(), assetTypes, fieldConfig }] };
+            set((state) => ({
+                mappings: state.mappings.map((m) => m.name === mapping.name ? newMapping : m)
+            }));
+
+            return;
+        }
+        
         const newMapping: FieldConfigMapping = { 
           name, 
-          fieldConfig, 
-          assetTypes, 
+          listMappings: [{ mappingId: Date.now(), assetTypes, fieldConfig }],
           isDefault: false 
         };
+
         set((state) => ({
           mappings: [...state.mappings, newMapping],
         }));

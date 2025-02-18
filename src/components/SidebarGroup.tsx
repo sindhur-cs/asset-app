@@ -147,7 +147,7 @@ const SidebarGroup = ({ item }: { item: { icon: React.ForwardRefExoticComponent<
                 )}
             </> : <Link
                 to={item.path}
-                className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors duration-200 ${isActive('/models')
+                className={`flex items-center gap-3 px-4 py-2 rounded-lg transition-colors duration-200 ${isActive(item.path)
                     ? 'bg-purple-50 text-purple-700 font-medium'
                     : 'text-gray-600 hover:bg-gray-50 hover:text-purple-600'
                     }`}

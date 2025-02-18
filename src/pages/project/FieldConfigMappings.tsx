@@ -34,8 +34,7 @@ const FieldConfigMappings = () => {
               <FieldConfigMappingCard
                 key={index}
                 name={mapping.name}
-                assetTypes={mapping.assetTypes}
-                fieldConfig={mapping.fieldConfig}
+                listMappings={mapping.listMappings}
                 isDefault={mapping.isDefault}
               />
             ))}
@@ -44,6 +43,7 @@ const FieldConfigMappings = () => {
             isOpen={isDialogOpen}
             onClose={() => setIsDialogOpen(false)}
             assetTypes={assetTypes}
+            edit={""}
           />
         </div>
       </main>

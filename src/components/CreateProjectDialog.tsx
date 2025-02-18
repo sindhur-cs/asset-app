@@ -21,7 +21,7 @@ const CreateProjectDialog = ({
     <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center">
       <div className="bg-white rounded-lg p-6 w-full max-w-md">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Create New Project</h2>
+          <h2 className="text-xl font-bold">Create New Space</h2>
           <button 
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
@@ -35,7 +35,7 @@ const CreateProjectDialog = ({
               htmlFor="projectName" 
               className="block text-sm font-medium text-gray-700 mb-2"
             >
-              Project Name
+              Space Name
             </label>
             <input
               id="projectName"
@@ -43,7 +43,7 @@ const CreateProjectDialog = ({
               value={projectName}
               onChange={(e) => onProjectNameChange(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-              placeholder="Enter project name"
+              placeholder="Enter space name"
               required
             />
           </div>

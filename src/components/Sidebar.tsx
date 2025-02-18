@@ -59,23 +59,18 @@ const Sidebar = () => {
         {
             icon: Settings,
             label: "Space Settings",
-            path: `/project/${params.id}/settings`,
+            path: "",
             isGroup: true,
             children: [
                 {
                     icon: Layers,
-                    label: 'Asset Type Groups',
-                    path: `/type-schemes`
-                },
-                {
-                    icon: Database,
-                    label: 'Asset Model Mappings',
-                    path: `/asset-model-scheme`
+                    label: 'Asset Types',
+                    path: `/project/${params.id}`
                 },
                 {
                     icon: FileSpreadsheet,
-                    label: 'Field Config Mappings',
-                    path: `/field-configuration-mappings`
+                    label: 'Fields',
+                    path: `/project/${params.id}/fields`
                 },
             ]
         }
