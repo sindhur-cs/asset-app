@@ -4,14 +4,14 @@ import { useProjectStore } from '../store/projectStore'
 import { Layers } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useFieldConfigMappingStore } from '../store/fieldConfigMappingStore'
-import { useFieldConfigurationStore } from '../store/fieldConfigurationStore'
+import { FieldConfig, useFieldConfigurationStore } from '../store/fieldConfigurationStore'
 
 const Project = () => {
     const { id } = useParams()
     const { getProject } = useProjectStore()
     const [assets, setAssets] = useState(new Map());
     const { mappings } = useFieldConfigMappingStore();
-    const { getConfiguration, configurations } = useFieldConfigurationStore();
+    const { getConfiguration } = useFieldConfigurationStore();
 
     const project = getProject(Number(id))
     console.log(project);
@@ -28,7 +28,7 @@ const Project = () => {
             // get the fields configured
             const { fieldConfig } = listMapping;
             const configuration = getConfiguration(fieldConfig);
-            const getConfiguredFields = new Set(configuration?.fieldConfigs.map((f) => f.name));
+            const getConfiguredFields = new Set(configuration?.fieldConfigs);
 
             // get the assets mapped
             const assetsList = listMapping.assetTypes.map((asset) => ({ 
@@ -57,13 +57,8 @@ const Project = () => {
         setAssets(newAssets);
     }, [listMappings, project, mappings, mappings.length]);
 
-    const isFieldMandatory = (fieldName: string) => {
-        console.log(configurations)
-        return configurations?.some(config => 
-            config.fieldConfigs?.some(fieldConfig => 
-                fieldConfig.name === fieldName && fieldConfig.isMandatory
-            )
-        );
+    const isFieldMandatory = (fieldConfig: FieldConfig) => {
+        return fieldConfig.isMandatory;
     };
 
     return (
@@ -110,7 +105,7 @@ const Project = () => {
                                                                 }`}
                                                             >
                                                                 {/* @ts-ignore */}
-                                                                {field || ""}
+                                                                {field.name || ""}
                                                             </span>
                                                         );
                                                     })}
