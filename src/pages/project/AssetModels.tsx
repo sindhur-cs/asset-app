@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Plus, Settings, Trash2, Database } from 'lucide-react'
+import { Plus, Settings, Trash2, Database, GripVertical } from 'lucide-react'
 import Sidebar from '../../components/Sidebar'
 import { useAssetModelStore } from '../../store/assetModelStore'
 import { useCustomFieldStore, systemFields } from '../../store/customFieldStore'
+import { useDrag, useDrop } from 'react-dnd'
 
 const AssetModels = () => {
   const [isCreating, setIsCreating] = useState(false)
@@ -15,6 +16,9 @@ const AssetModels = () => {
   const models = getModels()
   const customFields = getFields()
 
+  // here track the custom fields in a state to track its movement
+  const [cFields, setCFields] = useState(customFields); 
+
   const handleCreateModel = (e: React.FormEvent) => {
     e.preventDefault()
     if (modelName) {
@@ -26,6 +30,59 @@ const AssetModels = () => {
       setSelectedFields([])
       setIsCreating(false)
     }
+  }
+
+  const moveField = (dragIndex: number, hoverIndex: number) => {
+    // moves the custom fields
+    const updatedCFields = [...cFields]
+    const draggedCField = updatedCFields[dragIndex]
+    updatedCFields.splice(dragIndex, 1)
+    updatedCFields.splice(hoverIndex, 0, draggedCField)
+    setCFields(updatedCFields)
+  }
+
+  const Item = ({ field, index }: { field: any; index: number }) => {
+    const [, ref] = useDrag({
+      type: 'FIELD',
+      item: { index },
+    })
+
+    const [, drop] = useDrop({
+      accept: 'FIELD',
+      hover: (item: { index: number }) => {
+        if (item.index !== index) {
+          moveField(item.index, index)
+          item.index = index
+        }
+      },
+    })
+
+    return (
+      <div
+        ref={node => {
+          ref(drop(node));
+        }}
+        key={field.id}
+        className="flex items-center hover:bg-purple-50 rounded-lg gap-2 p-2 select-none"
+      >
+        <GripVertical className="h-4 w-4 text-gray-400 cursor-grab" />
+        <label className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            checked={selectedFields.includes(field.id)}
+            onChange={(e) => {
+              if (e.target.checked) {
+                setSelectedFields([...selectedFields, field.id])
+              } else {
+                setSelectedFields(selectedFields.filter(id => id !== field.id))
+              }
+            }}
+            className="text-purple-600 rounded"
+          />
+          <span>{field.name}</span>
+        </label>
+      </div>
+    )
   }
 
   return (
@@ -156,25 +213,8 @@ const AssetModels = () => {
                         Select Custom Fields
                       </label>
                       <div className="space-y-2 max-h-60 overflow-y-auto">
-                        {customFields.map((field) => (
-                          <label
-                            key={field.id}
-                            className="flex items-center gap-2 p-2 rounded-lg hover:bg-purple-50"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={selectedFields.includes(field.id)}
-                              onChange={(e) => {
-                                if (e.target.checked) {
-                                  setSelectedFields([...selectedFields, field.id])
-                                } else {
-                                  setSelectedFields(selectedFields.filter(id => id !== field.id))
-                                }
-                              }}
-                              className="text-purple-600 rounded"
-                            />
-                            <span>{field.name}</span>
-                          </label>
+                        {cFields.map((field, index) => (
+                          <Item key={field.id} field={field} index={index} />
                         ))}
                       </div>
                     </div>
@@ -204,4 +244,4 @@ const AssetModels = () => {
   )
 }
 
-export default AssetModels 
+export default AssetModels
